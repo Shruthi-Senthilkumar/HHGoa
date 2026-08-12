@@ -1,0 +1,38 @@
+/* Design Tokens for HH Goa 2026 */
+@theme inline {
+  /* Color System */
+  --color-bg-base: #f7f6f2;
+  --color-bg-surface: #ffffff;
+  --color-bg-inverse: #0a0a0a;
+
+  --color-text-primary: #0a0a0a;
+  --color-text-secondary: #666666;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #e5e5e5;
+  --color-border-inverse: #333333;
+
+  --color-accent: #ff4a11;
+  --color-accent-hover: #e03800;
+
+  /* Typography */
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-sans: var(--font-outfit), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+
+  /* Geometry */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  
+  /* Layout constraints */
+  --container-max: 1280px;
+}
+
+:root {
+  /* Expose raw css variables if needed outside tailwind utilities */
+  --bg-base: #f7f6f2;
+  --bg-surface: #ffffff;
+  --bg-inverse: #0a0a0a;
+  --text-primary: #0a0a0a;
+  --text-inverse: #ffffff;
+}
