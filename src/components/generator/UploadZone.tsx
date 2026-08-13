@@ -68,7 +68,7 @@ export function UploadZone({ onFileSelect, error }: UploadZoneProps) {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`w-full aspect-[4/5] sm:aspect-square flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all duration-300 ${
+        className={`w-full h-40 flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all duration-300 ${
           isDragging
             ? "border-2 border-text-primary bg-bg-inverse/5"
             : "border border-dashed border-border-inverse hover:bg-bg-inverse/5"

@@ -1,8 +1,7 @@
 import qrcode from 'qrcode';
 
 export async function generateQrCanvas(builderId: string): Promise<HTMLCanvasElement> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const payload = `${siteUrl}/goa?builder=${encodeURIComponent(builderId)}`;
+  const payload = builderId; // Use raw text instead of URL
   
   try {
     const canvas = await qrcode.toCanvas(payload, {

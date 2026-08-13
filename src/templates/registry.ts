@@ -9,11 +9,7 @@ import { template as builderCreative02 } from "./builder/creative-02";
 // Registry of all available templates
 export const templateRegistry: Record<string, FrameTemplate> = {
   "pfp-professional": pfpProfessional,
-  "pfp-creative-01": pfpCreative01,
-  "pfp-creative-02": pfpCreative02,
   "builder-professional": builderProfessional,
-  "builder-creative-01": builderCreative01,
-  "builder-creative-02": builderCreative02,
 };
 
 export function getTemplate(id: string): FrameTemplate {

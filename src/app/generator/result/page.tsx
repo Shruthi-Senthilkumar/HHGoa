@@ -137,17 +137,42 @@ export default function ResultPage() {
           {(() => {
             const activeTemplate = getTemplate(builderData.templateId);
             const aspectRatioStyle = format === "builder" ? {
-              aspectRatio: `${activeTemplate.config.width} / ${activeTemplate.config.height}`
+              aspectRatio: `${activeTemplate.config.width} / ${activeTemplate.config.height / 2}`
             } : undefined;
+
+            if (format === "builder") {
+              return (
+                <div className="flex flex-col md:flex-row items-center justify-center gap-12 w-full animate-fade-in px-4">
+                  {/* Front Side */}
+                  <div className="relative overflow-hidden shadow-2xl rounded-2xl w-full max-w-[320px]" style={aspectRatioStyle}>
+                    {generatedUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={generatedUrl} alt="Front ID" className="absolute top-0 left-0 w-full h-[200%] object-cover object-top" />
+                    ) : (
+                      <div className="animate-pulse w-full h-full bg-bg-inverse/5" />
+                    )}
+                  </div>
+                  
+                  {/* Back Side */}
+                  <div className="relative overflow-hidden shadow-2xl rounded-2xl w-full max-w-[320px]" style={aspectRatioStyle}>
+                    {generatedUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={generatedUrl} alt="Back ID" className="absolute bottom-0 left-0 w-full h-[200%] object-cover object-bottom" />
+                    ) : (
+                      <div className="animate-pulse w-full h-full bg-bg-inverse/5" />
+                    )}
+                  </div>
+                </div>
+              );
+            }
 
             return (
               <div 
-                className={`w-full max-w-[1600px] animate-fade-in bg-bg-surface border border-border flex items-center justify-center overflow-hidden ${format === 'pfp' ? 'max-w-md aspect-square rounded-full' : ''}`}
-                style={aspectRatioStyle}
+                className={`w-full animate-fade-in bg-bg-surface border border-border flex items-center justify-center overflow-hidden max-w-md aspect-square rounded-full`}
               >
                  {generatedUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={generatedUrl} alt="Generated Builder ID" className="w-full h-full object-contain shadow-2xl" />
+                    <img src={generatedUrl} alt="Generated PFP" className="w-full h-full object-contain shadow-2xl" />
                  ) : (
                     <div className="animate-pulse w-full h-full bg-bg-inverse/5" />
                  )}

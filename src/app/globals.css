@@ -32,6 +32,37 @@
       transform: none !important;
     }
   }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .hologram-shimmer {
+    background: linear-gradient(
+      125deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.1) 30%,
+      transparent 40%,
+      rgba(255, 100, 255, 0.05) 45%,
+      transparent 55%,
+      rgba(100, 255, 255, 0.05) 65%,
+      transparent 75%
+    );
+    background-size: 200% 200%;
+    animation: shimmer 5s infinite linear;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.3;
+  }
 }
 
 @keyframes revealUp {
@@ -54,3 +85,7 @@
   }
 }
 
+@keyframes shimmer {
+  0% { background-position: -100% -100%; }
+  100% { background-position: 200% 200%; }
+}

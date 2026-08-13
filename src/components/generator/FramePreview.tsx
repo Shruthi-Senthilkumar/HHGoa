@@ -4,9 +4,10 @@ import { getTemplate } from "@/templates/registry";
 import { clampPosition } from "@/lib/frame/imagePositionHelper";
 
 export function FramePreview() {
-  const { format, imageUrl, imagePosition, setImagePosition, builderData } = useGenerator();
+  const { format, imageUrl, imagePosition, setImagePosition, builderData, hasMagicApplied } = useGenerator();
   const [previewDataUrl, setPreviewDataUrl] = useState<string | null>(null);
   const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -106,38 +107,93 @@ export function FramePreview() {
   const activeTemplate = getTemplate(builderData.templateId);
   const isPfp = format === "pfp";
 
-  const containerClasses = `relative w-full overflow-hidden group animate-fade-in touch-none select-none cursor-grab active:cursor-grabbing border border-text-primary bg-bg-surface ${
-    isPfp ? "aspect-square rounded-full" : ""
+  const containerClasses = `relative w-full overflow-hidden group animate-fade-in touch-none select-none cursor-grab active:cursor-grabbing border border-[#f6f3eb]/20 bg-[#f6f3eb] shadow-2xl ${
+    isPfp ? "aspect-square rounded-full" : "rounded-2xl"
   }`;
 
   const aspectRatioStyle = isPfp ? undefined : {
     aspectRatio: `${activeTemplate.config.width} / ${activeTemplate.config.height}`
   };
 
+  if (isPfp) {
+    return (
+      <div 
+        ref={containerRef}
+        className={containerClasses}
+        style={aspectRatioStyle}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        aria-label="Drag to adjust photo position"
+        role="application"
+      >
+        {previewDataUrl ? (
+          <img
+            src={previewDataUrl}
+            alt="Preview"
+            className="w-full h-full object-contain pointer-events-none transition-all duration-1000"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center pointer-events-none">
+            <span className={`animate-pulse bg-[#04391e]/10 w-16 h-16 rounded-full`} />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Builder ID Card (3D Flip Mode)
   return (
-    <div 
-      ref={containerRef}
-      className={containerClasses}
-      style={aspectRatioStyle}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      aria-label="Drag to adjust photo position"
-      role="application"
-    >
-      {previewDataUrl ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
-          src={previewDataUrl}
-          alt="Preview"
-          className="w-full h-full object-contain pointer-events-none"
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center pointer-events-none">
-          <span className={`animate-pulse bg-white/20 ${isPfp ? "w-16 h-16 rounded-full" : "w-24 h-24 rounded-sm"}`} />
+    <div className="relative w-full perspective-1000 group" style={{ aspectRatio: '638 / 1013' }}>
+      {/* Flip Control */}
+      <button 
+        onClick={() => setIsFlipped(!isFlipped)}
+        className="absolute -right-4 -top-4 z-50 bg-[#ffcd00] text-[#04391e] font-bold text-xs uppercase tracking-widest px-5 py-2 rounded-full shadow-xl hover:scale-110 transition-transform"
+      >
+        FLIP ↻
+      </button>
+
+      <div className={`w-full h-full preserve-3d transition-transform duration-700 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] ${isFlipped ? 'rotate-y-180' : ''}`}>
+        
+        {/* FRONT FACE */}
+        <div 
+          ref={containerRef}
+          className="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-hidden shadow-2xl bg-[#f6f3eb] cursor-grab active:cursor-grabbing border-4 border-white"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+        >
+          {previewDataUrl ? (
+            <>
+              <div 
+                className="absolute inset-0 w-full h-full bg-no-repeat pointer-events-none" 
+                style={{ backgroundImage: `url(${previewDataUrl})`, backgroundSize: '100% 200%', backgroundPosition: 'top' }} 
+              />
+            </>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center pointer-events-none">
+              <span className="animate-pulse bg-[#04391e]/10 w-24 h-24 rounded-sm" />
+            </div>
+          )}
         </div>
-      )}
+
+        {/* BACK FACE */}
+        <div 
+          className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 rounded-2xl overflow-hidden shadow-2xl bg-[#04391e] border-4 border-[#ffcd00]"
+        >
+          {previewDataUrl && (
+            <>
+              <div 
+                className="absolute inset-0 w-full h-full bg-no-repeat pointer-events-none" 
+                style={{ backgroundImage: `url(${previewDataUrl})`, backgroundSize: '100% 200%', backgroundPosition: 'bottom' }} 
+              />
+              <div className="absolute inset-0 hologram-shimmer" />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

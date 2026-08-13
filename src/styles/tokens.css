@@ -1,19 +1,21 @@
 /* Design Tokens for HH Goa 2026 */
 @theme {
-  /* Color System */
-  --color-bg-base: #f7f6f2;
-  --color-bg-surface: #ffffff;
-  --color-bg-inverse: #0a0a0a;
+  /* Color System - Inspired by HH Goa official site (hhgoa.com) */
+  --color-bg-base: #075936;       /* Deep Goa Emerald Green */
+  --color-bg-surface: #f6f3eb;    /* Soft Beach Cream */
+  --color-bg-inverse: #03331e;    /* Dark Forest Shadow */
 
-  --color-text-primary: #0a0a0a;
-  --color-text-secondary: #666666;
-  --color-text-inverse: #ffffff;
+  --color-text-primary: #f6f3eb;  /* High-contrast Beach Cream on green */
+  --color-text-display: #ffcd00;  /* Vibrant Sunny Yellow for H1 & Title text */
+  --color-text-secondary: rgba(246, 243, 235, 0.8); /* Soft Light Cream */
+  --color-text-inverse: #04391e;  /* Dark Forest Green for text on cream cards */
 
-  --color-border: #e5e5e5;
-  --color-border-inverse: #333333;
+  --color-border: rgba(246, 243, 235, 0.25);
+  --color-border-inverse: #ffcd00;
 
-  --color-accent: #ff4a11;
-  --color-accent-hover: #e03800;
+  --color-accent: #ffcd00;        /* Sunny Yellow */
+  --color-accent-hover: #ffd733;
+  --color-accent-pink: #e60067;   /* Goa Hot Pink */
 
   /* Typography */
   --font-display: var(--font-space-grotesk), sans-serif;
@@ -29,10 +31,13 @@
 }
 
 :root {
-  /* Expose raw css variables if needed outside tailwind utilities */
-  --bg-base: #f7f6f2;
-  --bg-surface: #ffffff;
-  --bg-inverse: #0a0a0a;
-  --text-primary: #0a0a0a;
-  --text-inverse: #ffffff;
+  /* Expose raw css variables */
+  --bg-base: #075936;
+  --bg-surface: #f6f3eb;
+  --bg-inverse: #03331e;
+  --text-primary: #f6f3eb;
+  --text-display: #ffcd00;
+  --text-inverse: #04391e;
+  --accent-yellow: #ffcd00;
+  --accent-pink: #e60067;
 }

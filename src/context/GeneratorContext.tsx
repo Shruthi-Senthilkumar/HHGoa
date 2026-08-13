@@ -43,7 +43,7 @@ const defaultContext: GeneratorContextType = {
     role: "",
     builderTitle: "",
     builderId: "",
-    templateId: "builder-professional" 
+    templateId: "builder-professional",
   },
   setFormat: () => {},
   setImage: () => {},

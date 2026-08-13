@@ -144,8 +144,8 @@ export default function BuilderPage() {
                       <span>↻</span> REGENERATE
                     </button>
                   </div>
-                  <div className="w-full border border-text-primary/10 bg-bg-surface px-4 py-3">
-                    <Text mono weight="semibold" className="uppercase text-text-secondary">
+                  <div className="w-full bg-transparent border-b border-text-primary/30 py-3 min-h-[52px]">
+                    <Text mono className="text-xl uppercase text-text-primary">
                       {builderData.builderTitle}
                     </Text>
                   </div>

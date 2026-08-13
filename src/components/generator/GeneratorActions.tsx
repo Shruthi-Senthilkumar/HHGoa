@@ -58,17 +58,25 @@ export function GeneratorActions({ onFileSelect, onRemove }: GeneratorActionsPro
 
       {format === "pfp" ? (
         <Link href="/generator/result" className="w-full">
-          <Button size="lg" fullWidth className="group">
-            GENERATE PFP
-            <span className="ml-2 font-mono group-hover:translate-x-1 transition-transform">→</span>
-          </Button>
+          <button className="w-full relative overflow-hidden group bg-gradient-to-r from-[#ffcd00] to-[#ff9900] text-[#04391e] px-5 py-4 rounded-xl font-sans font-black text-lg uppercase tracking-wide hover:shadow-[0_0_20px_rgba(255,205,0,0.6)] transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0">
+            <div className="relative z-10 flex items-center justify-center gap-2">
+              <span>GENERATE PFP</span>
+              <span className="font-mono group-hover:translate-x-2 transition-transform">→</span>
+            </div>
+            {/* Shimmer effect */}
+            <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shimmer" />
+          </button>
         </Link>
       ) : (
         <Link href="/generator/builder" className="w-full">
-          <Button size="lg" fullWidth className="group">
-            CONTINUE
-            <span className="ml-2 font-mono group-hover:translate-x-1 transition-transform">→</span>
-          </Button>
+          <button className="w-full relative overflow-hidden group bg-gradient-to-r from-[#ffcd00] to-[#ff9900] text-[#04391e] px-5 py-4 rounded-xl font-sans font-black text-lg uppercase tracking-wide hover:shadow-[0_0_20px_rgba(255,205,0,0.6)] transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0">
+            <div className="relative z-10 flex items-center justify-center gap-2">
+              <span>CONTINUE</span>
+              <span className="font-mono group-hover:translate-x-2 transition-transform">→</span>
+            </div>
+            {/* Shimmer effect */}
+            <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shimmer" />
+          </button>
         </Link>
       )}
     </div>

@@ -56,9 +56,11 @@ export function Heading({
 
   const finalSize = size || defaultSizes[level];
 
+  const defaultTextColor = level === "h1" ? "text-text-display" : "text-text-primary";
+
   return (
     <Component
-      className={`font-display tracking-tight text-text-primary ${sizeMap[finalSize]} ${weightMap[weight]} ${className}`}
+      className={`font-display tracking-tight ${defaultTextColor} ${sizeMap[finalSize]} ${weightMap[weight]} ${className}`}
       {...props}
     >
       {children}

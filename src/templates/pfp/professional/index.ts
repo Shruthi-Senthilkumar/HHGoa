@@ -66,13 +66,30 @@ export async function render(data: FrameData): Promise<HTMLCanvasElement> {
     );
   }
 
+  const BORDER_WIDTH = 40;
   ctx.beginPath();
-  ctx.arc(PFP_SIZE / 2, PFP_SIZE / 2, (PFP_SIZE / 2) - 16, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-  ctx.lineWidth = 16;
+  // Draw the border completely inside the clipping region
+  ctx.arc(PFP_SIZE / 2, PFP_SIZE / 2, (PFP_SIZE / 2) - (BORDER_WIDTH / 2), 0, Math.PI * 2);
+  ctx.strokeStyle = "#ffcd00"; // HH Goa Yellow
+  ctx.lineWidth = BORDER_WIDTH;
   ctx.stroke();
 
-  drawText(ctx, "PROFESSIONAL PFP", PFP_SIZE / 2, PFP_SIZE - 96, 72, "Space Grotesk, sans-serif", "#ffffff", "900", "center", "bottom");
+  // Draw a secondary inner border for a premium feel
+  ctx.beginPath();
+  ctx.arc(PFP_SIZE / 2, PFP_SIZE / 2, (PFP_SIZE / 2) - BORDER_WIDTH - 2, 0, Math.PI * 2);
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  // Branding text with shadow for better visibility over varied photos
+  ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 6;
+  
+  // Use Fredoka One if loaded, fallback to system display fonts
+  drawText(ctx, "HH GOA", PFP_SIZE / 2, PFP_SIZE - 120, 110, "'Fredoka One', system-ui, -apple-system, sans-serif", "#ffcd00", "900", "center", "bottom");
+  drawText(ctx, "2026", PFP_SIZE / 2, PFP_SIZE - 45, 80, "'Fredoka One', system-ui, -apple-system, sans-serif", "#ffffff", "900", "center", "bottom");
+  ctx.shadowColor = "transparent"; // Reset shadow
 
   ctx.restore();
   return canvas;

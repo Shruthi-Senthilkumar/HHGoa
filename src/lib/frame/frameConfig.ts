@@ -6,12 +6,13 @@ export const FRAME_CONFIG = {
   height: 1350,
   
   colors: {
-    background: "#0a0a0a", // bg-surface (mostly covered by image)
-    foreground: "#f2f0eb", // off-white (text-inverse in the UI)
-    accent: "#ff4a11",     // color-accent
-    overlayLine: "rgba(242, 240, 235, 0.3)", // white/30 for lines
-    overlayBg: "rgba(10, 10, 10, 0.8)",      // dark backdrop
-    overlayBorder: "rgba(242, 240, 235, 0.2)"// border-white/20
+    background: "#075936", // HH Goa tropical green
+    foreground: "#f6f3eb", // beach cream text
+    accent: "#ffcd00",     // HH Goa sun yellow accent
+    accentPink: "#e60067", // HH Goa magenta accent
+    overlayLine: "rgba(246, 243, 235, 0.3)", // cream/30 for lines
+    overlayBg: "rgba(3, 51, 30, 0.85)",      // dark forest backdrop
+    overlayBorder: "rgba(255, 205, 0, 0.3)"  // yellow border
   },
 
   typography: {
