@@ -1,5 +1,5 @@
 /* Design Tokens for HH Goa 2026 */
-@theme inline {
+@theme {
   /* Color System */
   --color-bg-base: #f7f6f2;
   --color-bg-surface: #ffffff;

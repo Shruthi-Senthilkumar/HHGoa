@@ -1,12 +1,27 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useGenerator } from "@/context/GeneratorContext";
 import { getTemplate } from "@/templates/registry";
+import { clampPosition } from "@/lib/frame/imagePositionHelper";
 
 export function FramePreview() {
-  const { format, imageUrl, imagePosition, builderData } = useGenerator();
+  const { format, imageUrl, imagePosition, setImagePosition, builderData } = useGenerator();
   const [previewDataUrl, setPreviewDataUrl] = useState<string | null>(null);
+  const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
 
-  // Memoize the data object to prevent excessive re-renders, but ensure it updates on every stroke
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const lastPointer = useRef<{ x: number; y: number } | null>(null);
+  const activePointers = useRef<number>(0);
+
+  // Load raw image size for clamping
+  useEffect(() => {
+    if (!imageUrl) return;
+    const img = new Image();
+    img.onload = () => setImageSize({ w: img.width, h: img.height });
+    img.src = imageUrl;
+  }, [imageUrl]);
+
+  // Memoize the data object to prevent excessive re-renders
   const frameData = useMemo(() => ({
     imageUrl: imageUrl || "",
     imagePosition,
@@ -19,12 +34,11 @@ export function FramePreview() {
 
   useEffect(() => {
     if (!imageUrl) return;
-
     let isActive = true;
     const templateId = builderData.templateId;
     const template = getTemplate(templateId);
 
-    // Debounce rendering slightly
+    // Debounce rendering slightly for smoother dragging
     const timer = setTimeout(() => {
       template.render(frameData, template.config)
         .then((canvas) => {
@@ -35,7 +49,7 @@ export function FramePreview() {
         .catch(err => {
           console.error("Failed to render preview canvas:", err);
         });
-    }, 100);
+    }, 15);
 
     return () => {
       isActive = false;
@@ -43,47 +57,85 @@ export function FramePreview() {
     };
   }, [frameData, builderData.templateId, imageUrl]);
 
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (!imageUrl || !imageSize) return;
+    activePointers.current += 1;
+    isDragging.current = true;
+    lastPointer.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current || !lastPointer.current || !containerRef.current || !imageSize) return;
+    
+    const dx = e.clientX - lastPointer.current.x;
+    const dy = e.clientY - lastPointer.current.y;
+    lastPointer.current = { x: e.clientX, y: e.clientY };
+    
+    const template = getTemplate(builderData.templateId);
+    const canvasWidth = template.config.width;
+    const displayWidth = containerRef.current.clientWidth;
+    const ratio = displayWidth > 0 ? canvasWidth / displayWidth : 1;
+    
+    const canvasDx = dx * ratio;
+    const canvasDy = dy * ratio;
+    
+    const region = template.config.photoRegion;
+    const next = clampPosition(
+      imagePosition.x + canvasDx,
+      imagePosition.y + canvasDy,
+      imagePosition.scale,
+      imageSize,
+      region
+    );
+    
+    setImagePosition(next);
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    activePointers.current = Math.max(0, activePointers.current - 1);
+    if (activePointers.current === 0) {
+      isDragging.current = false;
+      lastPointer.current = null;
+    }
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+
   if (!imageUrl) return null;
 
-  if (format === "pfp") {
-    return (
-      <div className="relative w-full aspect-square rounded-full border border-text-primary bg-bg-surface overflow-hidden group animate-fade-in">
-        {previewDataUrl ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={previewDataUrl}
-            alt="PFP Preview"
-            className="w-full h-full object-contain"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="animate-pulse bg-white/20 w-16 h-16 rounded-full" />
-          </div>
-        )}
-      </div>
-    );
-  }
-
   const activeTemplate = getTemplate(builderData.templateId);
-  const aspectRatioStyle = {
+  const isPfp = format === "pfp";
+
+  const containerClasses = `relative w-full overflow-hidden group animate-fade-in touch-none select-none cursor-grab active:cursor-grabbing border border-text-primary bg-bg-surface ${
+    isPfp ? "aspect-square rounded-full" : ""
+  }`;
+
+  const aspectRatioStyle = isPfp ? undefined : {
     aspectRatio: `${activeTemplate.config.width} / ${activeTemplate.config.height}`
   };
 
   return (
     <div 
-      className="relative w-full border border-text-primary bg-bg-surface overflow-hidden group animate-fade-in"
+      ref={containerRef}
+      className={containerClasses}
       style={aspectRatioStyle}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      aria-label="Drag to adjust photo position"
+      role="application"
     >
       {previewDataUrl ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={previewDataUrl}
-          alt="Builder ID Preview"
-          className="w-full h-full object-contain"
+          alt="Preview"
+          className="w-full h-full object-contain pointer-events-none"
         />
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <span className="animate-pulse bg-white/20 w-24 h-24 rounded-sm" />
+        <div className="w-full h-full flex items-center justify-center pointer-events-none">
+          <span className={`animate-pulse bg-white/20 ${isPfp ? "w-16 h-16 rounded-full" : "w-24 h-24 rounded-sm"}`} />
         </div>
       )}
     </div>
