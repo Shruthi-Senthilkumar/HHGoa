@@ -4,7 +4,7 @@ import { getTemplate } from "@/templates/registry";
 import { clampPosition } from "@/lib/frame/imagePositionHelper";
 
 export function FramePreview() {
-  const { format, imageUrl, imagePosition, setImagePosition, builderData, hasMagicApplied } = useGenerator();
+  const { format, imageUrl, imagePosition, setImagePosition, builderData } = useGenerator();
   const [previewDataUrl, setPreviewDataUrl] = useState<string | null>(null);
   const [imageSize, setImageSize] = useState<{ w: number; h: number } | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);

@@ -14,7 +14,7 @@ import { useGenerator } from "@/context/GeneratorContext";
 import { PhotoAdjuster } from "./PhotoAdjuster";
 
 export function GeneratorWorkspace() {
-  const { format, setFormat, imageUrl, setImage, isApplyingMagic, hasMagicApplied, applyMagic } = useGenerator();
+  const { format, setFormat, imageUrl, setImage } = useGenerator();
   const [error, setError] = React.useState<string | null>(null);
 
   const status = imageUrl ? "ready" : "empty";
