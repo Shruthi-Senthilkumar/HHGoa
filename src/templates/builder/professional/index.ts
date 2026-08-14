@@ -96,7 +96,13 @@ export async function render(data: FrameData): Promise<HTMLCanvasElement> {
   ctx.roundRect(config.photoRegion.x, config.photoRegion.y, config.photoRegion.width, config.photoRegion.height, 30);
   ctx.stroke();
   const nameText = data.name || "Your Name";
-  drawText(ctx, nameText, 50, 790, 70, "'Space Grotesk', sans-serif", "#ffffff", "800", "left", "bottom");
+  const maxNameWidth = WIDTH - 100; // 50px padding on each side
+  const nameFontSize = measureFittedText(ctx, nameText, "'Space Grotesk', sans-serif", "800", maxNameWidth, 30, 70);
+  ctx.font = `800 ${nameFontSize}px 'Space Grotesk', sans-serif`;
+  ctx.fillStyle = "#ffffff";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "bottom";
+  ctx.fillText(nameText, 50, 790, maxNameWidth);
 
   const roleText = data.role || "Role / Title";
   drawText(ctx, roleText, 50, 848, 35, "'Inter', sans-serif", textGold, "600", "left", "bottom");
